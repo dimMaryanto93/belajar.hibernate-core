@@ -2,7 +2,7 @@
 
 Hibernate ORM, jaman sekarang hibernate adalah teknologi yang wajib diketahui baik itu secara konsep maupun secara fisikal (Koding). Pertanyaanya buat apa? khan bisa pake JDBC biasa?
 
-1. Yang pertama kenapa menggunakan Hibernate? jawabanya adalah Strukturnya lebih mudah, tidak terlalu banyak menggunakan `try-catch`, Cara berpilirnya lebih ke Object Oriented bukan ke struktur data database.
+1. Yang pertama kenapa menggunakan Hibernate? jawabanya adalah Strukturnya lebih mudah, tidak terlalu banyak menggunakan `try-catch`, Cara berpikirnya lebih ke Object Oriented bukan ke struktur data database.
 
 2. Yang kedua khan bisa menggunakan JDBC biasa? jawabanya adalah Hibernate juga mengimplementasikan JDBC jadi klo belajar juga gak akan ada salahnya toh konsepnya hampir sama (menurutku ya...).
 
@@ -22,7 +22,7 @@ Membuat project dari maven repository, karena kita hanya membuat beberapa pengga
 mvn archetype:generate -DartifactId=orm-hibernate -DgroupId=com.hotmail.dimmaryanto.software.belajar -Dversion=1.0 -DarchetypeCatalog='internal' -DarchetypeArtifactId=maven-archetype-quickstart
 ```
 
-* Update pom.xml
+* Setup `pom.xml`
 
 Ubah dependency artifactId=junit menjadi versi terbaru klo di saya pake versi 4.12
 
@@ -55,4 +55,24 @@ Kemudian tambahkan plugin dengan artifactId=maven-compiler-plugin dari groupId=o
 		</plugins>
 	</build>
 </project>
+```
+
+Lalu setelah kita ubah konfigurasi JDK dari `1.5` ke `1.8` tahap salanjutnya adalah menambahkan dependecy hibernate yaitu dengan artifactId=hibernate-core dari groupId=org.hibernate seperti berikut:
+
+```xml
+<dependency>
+   <groupId>org.hibernate</groupId>
+   <artifactId>hibernate-core</artifactId>
+   <version>5.2.6.Final</version>
+</dependency>
+```
+
+Udah beres??? eitsss ada yang ketinggalan JDBC untuk postgreSQLnya belum ok tambahkan dulu ya seperti berikut:
+
+```xml
+<dependency>
+    <groupId>org.postgresql</groupId>
+    <artifactId>postgresql</artifactId>
+    <version>9.4.1212.jre7</version>
+</dependency>
 ```
