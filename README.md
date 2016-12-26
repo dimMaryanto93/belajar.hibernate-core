@@ -128,7 +128,7 @@ Setelah setup databasenya selesai, kita balik lagi ke Konfigurasi Hibernate (hib
   <property name="hibernate.connection.username">org_hibernate</property>
   <property name="hibernate.connection.password">orm</property>
   <property name="hibernate.connection.pool_size">1</property>
- </session-factory
+ </session-factory>
 </hibernate-configuration>
 ```
 
