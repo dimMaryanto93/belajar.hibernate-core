@@ -95,3 +95,21 @@ Jika sudah tambahkan tag seperti berikut ke file tersebut:
 ```
 
 Tags `<hibernate-configuraion>` adalah container untuk kita menyimpan configurasi hibernate seperti connection ke database, mapping entity, configurasi lainya seperti ketika hibernate di execute maka dia menampilkan sqlnya di console, generate otomatis table dari entity dengan schema `update` atau `create` atau `create-drop` dan `validate`.
+
+Nah sebelum masuk ke konfigurasi lebih lanjut kita buat dulu databasenya, contohnya nama databasenya `orm_hibernate` kemudian saya juga mau membuat user dengan nama `org_hibernate` password `orm` jadi kurang lebih seperti berikut:
+
+```bash
+## login dulu pke psql
+dimmaryanto93@ASPIRE-e14:~$ psql -h localhost -U postgres 
+psql (9.5.5)
+SSL connection (protocol: TLSv1.2, cipher: ECDHE-RSA-AES256-GCM-SHA384, bits: 256, compression: off)
+Type "help" for help.
+
+## bikin user dan password
+postgres=# create user org_hibernate with superuser login password 'orm';
+CREATE ROLE
+
+## bikin databasenya
+postgres=# create database orm_hibernate with owner org_hibernate;
+CREATE DATABASE
+```
