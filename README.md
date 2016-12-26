@@ -131,3 +131,106 @@ Setelah setup databasenya selesai, kita balik lagi ke Konfigurasi Hibernate (hib
  </session-factory
 </hibernate-configuration>
 ```
+
+Setelah itu kita buat kelas Java `HibernateFactory` dalam package `com.hotmail.dimmaryanto.software.belajar` lalu kita buat configurasi SessionFactory. seperti berikut:
+
+```java
+package com.hotmail.dimmaryanto.software.belajar;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+
+public class HibernateFactory {
+	
+	private SessionFactory sessionFactory;
+
+	public SessionFactory getSessionFactory() {
+		final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
+				.configure() // configures settings from hibernate.cfg.xml
+				.build();
+		try {
+			sessionFactory = new MetadataSources( registry ).buildMetadata().buildSessionFactory();
+		}catch (Exception e) {
+			// The registry would be destroyed by the SessionFactory, but we had trouble building the SessionFactory
+			// so destroy it manually.
+			StandardServiceRegistryBuilder.destroy( registry );
+		}
+		return sessionFactory;
+	}
+	
+	public static void main(String[] args){
+		HibernateFactory factory = new HibernateFactory();
+		SessionFactory sessionFactory = factory.getSessionFactory();
+		Session session = sessionFactory.openSession();
+		session.close();
+		sessionFactory.close();
+	}
+}
+```
+
+Setelah itu coba anda jalankan dengan perintah maven seperti berikut:
+
+```bash
+mvn clean compile exec:java -Dexec.mainClass=com.hotmail.dimmaryanto.software.belajar.HibernateFactory
+```
+
+Maka outputnya seperti berikut:
+
+```bash
+dimmaryanto93@ASPIRE-e14:~/Temp/orm-hibernate$ mvn clean compile exec:java -Dexec.mainClass=com.hotmail.dimmaryanto.software.belajar.HibernateFactory
+[INFO] Scanning for projects...
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building Hibernate - Object Relational Mapping 1.0
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ orm-hibernate ---
+[INFO] Deleting /home/dimmaryanto93/Temp/orm-hibernate/target
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ orm-hibernate ---
+[WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] Copying 1 resource
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.5.1:compile (default-compile) @ orm-hibernate ---
+[INFO] Changes detected - recompiling the module!
+[WARNING] File encoding has not been set, using platform encoding UTF-8, i.e. build is platform dependent!
+[INFO] Compiling 2 source files to /home/dimmaryanto93/Temp/orm-hibernate/target/classes
+[INFO] 
+[INFO] --- exec-maven-plugin:1.5.0:java (default-cli) @ orm-hibernate ---
+Dec 26, 2016 10:59:56 PM org.hibernate.Version logVersion
+INFO: HHH000412: Hibernate Core {5.2.6.Final}
+Dec 26, 2016 10:59:56 PM org.hibernate.cfg.Environment <clinit>
+INFO: HHH000206: hibernate.properties not found
+Dec 26, 2016 10:59:56 PM org.hibernate.annotations.common.reflection.java.JavaReflectionManager <clinit>
+INFO: HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+Dec 26, 2016 10:59:56 PM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl configure
+WARN: HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+Dec 26, 2016 10:59:56 PM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl buildCreator
+INFO: HHH10001005: using driver [org.postgresql.Driver] at URL [jdbc:postgresql://localhost:5432/orm_hibernate]
+Dec 26, 2016 10:59:56 PM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl buildCreator
+INFO: HHH10001001: Connection properties: {user=org_hibernate, password=****}
+Dec 26, 2016 10:59:56 PM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl buildCreator
+INFO: HHH10001003: Autocommit mode: false
+Dec 26, 2016 10:59:56 PM org.hibernate.engine.jdbc.connections.internal.PooledConnections <init>
+INFO: HHH000115: Hibernate connection pool size: 1 (min=1)
+Dec 26, 2016 10:59:56 PM org.hibernate.dialect.Dialect <init>
+INFO: HHH000400: Using dialect: org.hibernate.dialect.PostgreSQLDialect
+Dec 26, 2016 10:59:57 PM org.hibernate.engine.jdbc.env.internal.LobCreatorBuilderImpl useContextualLobCreation
+INFO: HHH000424: Disabling contextual LOB creation as createClob() method threw error : java.lang.reflect.InvocationTargetException
+Dec 26, 2016 10:59:57 PM org.hibernate.type.BasicTypeRegistry register
+INFO: HHH000270: Type registration [java.util.UUID] overrides previous : org.hibernate.type.UUIDBinaryType@180e0d7e
+Dec 26, 2016 10:59:57 PM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl stop
+INFO: HHH10001008: Cleaning up connection pool [jdbc:postgresql://localhost:5432/orm_hibernate]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 5.162 s
+[INFO] Finished at: 2016-12-26T22:59:57+07:00
+[INFO] Final Memory: 23M/226M
+[INFO] ------------------------------------------------------------------------
+```
+
+Itu tandanya configurasinya udah benar dan udah terhubung dengan database `jdbc:postgresql://localhost:5432/orm_hibernate`
