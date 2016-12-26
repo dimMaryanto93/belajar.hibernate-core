@@ -76,3 +76,22 @@ Udah beres??? eitsss ada yang ketinggalan JDBC untuk postgreSQLnya belum ok tamb
     <version>9.4.1212.jre7</version>
 </dependency>
 ```
+
+### Konfigurasi Hibernate
+
+Konfigurasi Hibernate pada dasarnya ada 2 jenis konfigurasi yaitu dengan Source Code java atau saya lebih sering sebut Java Config dan XML (hibernate.cfg.xml). Jaman sekarang Konfigurasi dengan XML udah sangat jarang karena mengikuti style Java yang berbau _annotation_ (`@Annotations`). Tpi gak apa karena kita mau niatnya belajar jadi Ya ikutin aja ya... karena klo kita menggunakan XML juga gak ada ruginya kok toh XML juga lebih mudah dibaca dibandingkan Java Config.
+
+Tahap selanjutnya kita harus buat file dengan nama `hibernate.cfg.xml` dalam source code kita. Karena kita menggunakan Apache Maven jadi kita buat dalam folder `src/main/resources` klo belum ada silahkan buat dulu foldernya setelah itu buat filenya yaitu `hibernate.cfg.xml`
+
+Jika sudah tambahkan tag seperti berikut ke file tersebut:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+		"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+		"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+</hibernate-configuration>
+```
+
+Tags `<hibernate-configuraion>` adalah container untuk kita menyimpan configurasi hibernate seperti connection ke database, mapping entity, configurasi lainya seperti ketika hibernate di execute maka dia menampilkan sqlnya di console, generate otomatis table dari entity dengan schema `update` atau `create` atau `create-drop` dan `validate`.
