@@ -234,3 +234,30 @@ INFO: HHH10001008: Cleaning up connection pool [jdbc:postgresql://localhost:5432
 ```
 
 Itu tandanya configurasinya udah benar dan udah terhubung dengan database `jdbc:postgresql://localhost:5432/orm_hibernate`
+
+## Model atau entity
+
+Model merepresentasikan attribut di table pada System Database Management System. Biasanya kita membuat program yang berbasis database baik itu Oracle, Mysql ataupun PostgreSQL kita harus 
+mengenal yang namanya perintah SQL. SQL ini merupakan salah satu alat untuk melakukan query ke database.
+hal tersebut memang udah kuno??? knapa kuno?? ia lah itu teknologi udah ada sejak kapan tahun
+artinya kita masih menggunakan query yang sifatnya terstrukur, tapi terstruktur belum tentu jelek ya!!! hanya udah tidak relevant aja hehehe...
+
+Jaman sekarang, Teknologi yang masih digunakan yaitu ORM atau Object Relational Mapping dan juga NoSQL.
+Hibernate ini bisa menggunakan teknologi tersebut anda tinggal milih aja mau pake teknologi yang mana semuannya punya kekurangan dan kelebihan masing2.
+Karena saya mau bahas yang paling fundamental jadi kita bahas dulu yang ORM ya. mungkin yang NoSQL lain kesempatan karena saya juga masih mempelajarinya lebih dalam.
+
+Seperti yang telah saya katakan, dengan menggunakan Hibernate ini akan mengurangi kita berinteraksi dengan bahasa SQL.
+mengurangi bukan berarti tidak pake ya tetap ja harus tau perintahnya!! karena jujur aja saya sebenarnya tidak terlalu hafal dengan perintah SQL jadi saya lebih suka menggunakan koding Java.
+
+
+### Orientasi SQL ke Hibernate
+
+Jaman dulu kita koding, hal pertama yang kita buat adalah perancangan ERD atau Normalisasi / Table Relasi, setelah itu baru kita koding ke Javanya.
+Sekarang orientasinya kita balik jadi Java yang akan membuatkan perintah SQLnya?? itu semacam generator ya?? ia itu benar.
+Tetapi itu tidak jadi patokan kok! kita juga bisa membuat database berserta table-tablenya baru buat mapping di Javanya.
+
+### Perbedaan mendasar dari SQL ke Hibernate (Annotations)
+
+Perbedaanya klo kita menggunakan SQL, kita harus mengurus semuanya mulai dari connection, pooling connectionya, open connection, close connection, trus klo ada error itu harus kita handel manually.
+Sedangkan menggunakan Hibernate hal tersebut udah diurusin sama si Hibernate bahkan sampai yang hal lebih detail lagi contohnya tentang constraint `on update cascade on delete cascade` jadi 
+setiap kali di update table yang menjadi refenresinya juga akan ikut berubah begitu pula dengan even delete.
