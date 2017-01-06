@@ -8,3 +8,7 @@ target/
 
 # visual studio code
 .vscode
+
+# intelij IDEA
+.idea/
+orm-hibernate.iml
