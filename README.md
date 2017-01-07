@@ -393,3 +393,84 @@ Hibernate: alter table Negara drop constraint if exists UK_hdx3qooqyjm09bpq36fsw
 ```
 
 Itu adalah hasil generate yang dilakukan oleh hibernate dari kelas `Negara` yang ada di package `com.hotmail.dimmaryanto.software.belajar.model`.
+
+## Membuat CRUD basic dengan JUnit
+
+Untuk memudahkan dalam method penulisan kodingnya saya, mau menggunakan JUnit ya... nah jadi JUnit bagi yang belum tau tujuannya adalah untuk menguji atau testing atau lebih dikenal automated testing framework.
+Jadi dengan menggunakan JUnit kita bisa meng-automasi atau automatisasi testing terhadap koding yang kita buat. contohnya klo dikasus yang kita buat nanti adalah melakukan Membuka connection, CRUD operation dan lain-lain.
+
+Untuk menggunakan JUnit kita buat folder dulu dengan nama `test` kemudian buat folder lagi didalamnya dengan nama `java` dan `resources` pada folder `src` jadi strutur folder kita kurang lebih seperti ini:
+
+```bash
+├── pom.xml
+├── README.md
+└── src
+    ├── main
+    │   ├── java
+    │   │   └── com
+    │   │       └── hotmail
+    │   │           └── dimmaryanto
+    │   │               └── software
+    │   │                   └── belajar
+    │   │                       ├── App.java
+    │   │                       ├── HibernateFactory.java
+    │   │                       └── model
+    │   │                           └── Negara.java
+    │   └── resources
+    │       └── hibernate.cfg.xml
+    └── test
+        ├── java
+        │   └── com
+        │       └── hotmail
+        │           └── dimmaryanto
+        │               └── software
+        │                   └── belajar
+        │                       └── test
+        │                           └── CRUDBasic.java
+        └── resources
+
+19 directories, 8 files
+```
+
+Nah sekarang baru kita buat class Java dengan nama `CRUDBasic` yang isinya seperti berikut:
+
+```java
+package com.hotmail.dimmaryanto.software.belajar.test;
+
+import com.hotmail.dimmaryanto.software.belajar.HibernateFactory;
+import junit.framework.TestCase;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.junit.Test;
+
+public class CRUDBasic extends TestCase {
+
+    private SessionFactory sessionFactory;
+
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        HibernateFactory hibernateFactory = new HibernateFactory();
+        sessionFactory = hibernateFactory.getSessionFactory();
+    }
+
+    @Test
+    public void testOpeningSession(){
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        session.close();
+    }
+
+    @Override
+    protected void tearDown() throws Exception {
+        super.tearDown();
+        sessionFactory.close();
+    }
+}
+```
+
+Penjelasan koding diatas:
+
+* method `setup()` digunakan untuk menginisialisasi sesuatu contohnya pada koding tersebut kita menginisialisasi object SessionFactory
+* method `tearDown()` digunakan untuk mendestroy sesuatu contohnya pada koding tersebut kita menutup object SessionFactory
+* method `testOpeningSession` adalah contoh salah satu testnya, kita melakukan test membuka koneksi si hibernatenya.
