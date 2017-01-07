@@ -5,6 +5,7 @@ import com.hotmail.dimmaryanto.software.belajar.model.Negara;
 import junit.framework.TestCase;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.junit.After;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -31,6 +32,7 @@ public class CRUDBasic extends TestCase {
     }
 
     @Test
+    @Ignore
     public void testSimpanNegaraIndonesia() {
         // instance new object
         Negara indonesia = new Negara();
@@ -46,6 +48,22 @@ public class CRUDBasic extends TestCase {
         session.save(indonesia);
         // commite transaction
         session.getTransaction().commit();
+        session.close();
+    }
+
+    @Test
+    public void testUpdateNegaraIndonesia() {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        // find negara by id
+        Negara indonesia = session.get(Negara.class, 62);
+        assertEquals("INA", indonesia.getKode());
+
+        indonesia.setKode("IND");
+        session.update(indonesia);
+
+        indonesia = session.get(Negara.class, 62);
+        assertEquals("IND", indonesia.getKode());
         session.close();
     }
 
