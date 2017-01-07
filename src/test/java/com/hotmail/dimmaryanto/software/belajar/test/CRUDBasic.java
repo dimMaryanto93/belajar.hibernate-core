@@ -5,7 +5,6 @@ import com.hotmail.dimmaryanto.software.belajar.model.Negara;
 import junit.framework.TestCase;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -23,7 +22,6 @@ public class CRUDBasic extends TestCase {
     }
 
     @Test
-    @Ignore
     public void testOpeningSession() {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
@@ -31,7 +29,6 @@ public class CRUDBasic extends TestCase {
     }
 
     @Test
-    @Ignore
     public void testSimpanNegaraIndonesia() {
         // instance new object
         Negara indonesia = new Negara();

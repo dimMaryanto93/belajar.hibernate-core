@@ -16,5 +16,6 @@
         <property name="hibernate.show_sql">true</property>
         <!--mapping by xml-->
         <mapping class="com.hotmail.dimmaryanto.software.belajar.model.Negara"></mapping>
+        <mapping class="com.hotmail.dimmaryanto.software.belajar.model.Nasabah"></mapping>
     </session-factory>
 </hibernate-configuration>
