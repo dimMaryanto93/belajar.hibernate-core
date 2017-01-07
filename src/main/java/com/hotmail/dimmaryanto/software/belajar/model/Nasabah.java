@@ -35,7 +35,7 @@ public class Nasabah {
     @Column(name = "nomor_register_nasabah")
     private String noRegister;
 
-    @Column(name = "waktu_register", nullable = false)
+    @Column(name = "waktu_register")
     @GeneratorType(type = TimeGenerator.class, when = GenerationTime.INSERT)
     private Timestamp waktuRegister;
 
@@ -48,11 +48,10 @@ public class Nasabah {
     @Column(name = "nama_belakang", nullable = false)
     private String namaBelakang;
 
-    @Formula(value = "nama_depan + nama_belakang")
-    @Column(name = "nama_lengkap", nullable = false)
+    @Formula(value = "concat(nama_depan, nama_belakang)")
     private String namaLengkap;
 
-    @Column(name = "diblacklist", nullable = false)
+    @Column(name = "diblacklist")
     @ColumnDefault(value = "false")
     private Boolean blacklist;
 
