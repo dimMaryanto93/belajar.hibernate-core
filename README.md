@@ -655,3 +655,49 @@ Nah secara otomatis hibernate akan membuat query seperti berikut:
 ```sql
 Hibernate: insert into Negara (kode_negara, nama_negara, no_area) values (?, ?, ?)
 ```
+
+Sekarang kita buat update operation, tambahkan method berikut pada kelas yang sama:
+
+```java
+package com.hotmail.dimmaryanto.software.belajar.test;
+
+import com.hotmail.dimmaryanto.software.belajar.HibernateFactory;
+import com.hotmail.dimmaryanto.software.belajar.model.Negara;
+import junit.framework.TestCase;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.junit.Ignore;
+import org.junit.Test;
+
+/**
+ * Created by dimmaryanto93 on 07/01/17.
+ */
+public class CRUDBasic extends TestCase {
+
+//    function lainnya...
+    
+    @Test
+    public void testUpdateNegaraIndonesia() {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        // find negara by id
+        Negara indonesia = session.get(Negara.class, 62);
+        assertEquals("INA", indonesia.getKode());
+
+        indonesia.setKode("IND");
+        session.update(indonesia);
+
+        indonesia = session.get(Negara.class, 62);
+        assertEquals("IND", indonesia.getKode());
+        session.close();
+    }
+
+}
+```
+
+Jadi gini alurnya:
+
+* Pertama kita, ambil dulu datanya berdasarkan `area` yaitu `62` yang di isi ke object `indonesia`
+* Setelah itu kita periksa dulu nilainya dengan `assertEquals` apakah nilai kode.a adalah `INA`
+* Kemudian kita ubah nilainya menjadi `IND` lalu kita lakukan update
+* Lalu lakukan langkah ke 1 dan 2, dengan mengecek nilai yang disimpan apakah telah terupdate.
