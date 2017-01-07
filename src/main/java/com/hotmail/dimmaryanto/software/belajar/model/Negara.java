@@ -14,24 +14,21 @@ import javax.persistence.Id;
 public class Negara {
 
     @Id
-    @GeneratedValue
-    private String id;
+    @Column(name = "no_area", nullable = false, unique = true, length = 3)
+    private Integer area;
 
     @Column(name = "kode_negara", nullable = false, unique = true, length = 3)
     private String kode;
 
-    @Column(name = "no_area", nullable = false, unique = true, length = 3)
-    private Integer area;
-
     @Column(name = "nama_negara", nullable = false)
     private String nama;
 
-    public String getId() {
-        return id;
+    public Integer getArea() {
+        return area;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setArea(Integer area) {
+        this.area = area;
     }
 
     public String getKode() {
@@ -40,14 +37,6 @@ public class Negara {
 
     public void setKode(String kode) {
         this.kode = kode;
-    }
-
-    public Integer getArea() {
-        return area;
-    }
-
-    public void setArea(Integer area) {
-        this.area = area;
     }
 
     public String getNama() {
