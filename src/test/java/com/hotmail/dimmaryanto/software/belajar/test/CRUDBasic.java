@@ -5,7 +5,6 @@ import com.hotmail.dimmaryanto.software.belajar.model.Negara;
 import junit.framework.TestCase;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.junit.After;
 import org.junit.Ignore;
 import org.junit.Test;
 
