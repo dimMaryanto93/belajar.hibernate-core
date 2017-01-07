@@ -381,7 +381,14 @@ INFO: HHH10001008: Cleaning up connection pool [jdbc:postgresql://localhost:5432
 Nah coba perhatikan perintah berikut:
 
 ```sql
-Hibernate: create table Negara (id varchar(255) not null, no_area int4 not null, kode_negara varchar(3) not null, nama_negara varchar(255) not null, primary key (id))
+Hibernate: 
+  create table Negara (
+    id varchar(255) not null, 
+    no_area int4 not null, 
+    kode_negara varchar(3) not null, 
+    nama_negara varchar(255) not null, 
+    primary key (id)
+  )
 Hibernate: alter table Negara drop constraint if exists UK_hdx3qooqyjm09bpq36fsw5lto
 ```
 
