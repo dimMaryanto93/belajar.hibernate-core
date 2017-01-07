@@ -474,3 +474,53 @@ Penjelasan koding diatas:
 * method `setup()` digunakan untuk menginisialisasi sesuatu contohnya pada koding tersebut kita menginisialisasi object SessionFactory
 * method `tearDown()` digunakan untuk mendestroy sesuatu contohnya pada koding tersebut kita menutup object SessionFactory
 * method `testOpeningSession` adalah contoh salah satu testnya, kita melakukan test membuka koneksi si hibernatenya.
+
+Untuk menjalankan testnya kita bisa menggunakan perintah seperti berikut:
+
+```bash
+mvn clean test -Dtest=*
+```
+
+berikut hasilnya:
+
+```bash
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running com.hotmail.dimmaryanto.software.belajar.test.CRUDBasic
+Jan 07, 2017 10:19:24 AM org.hibernate.Version logVersion
+INFO: HHH000412: Hibernate Core {5.2.6.Final}
+Jan 07, 2017 10:19:24 AM org.hibernate.cfg.Environment <clinit>
+INFO: HHH000206: hibernate.properties not found
+Jan 07, 2017 10:19:24 AM org.hibernate.annotations.common.reflection.java.JavaReflectionManager <clinit>
+INFO: HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+Jan 07, 2017 10:19:24 AM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl configure
+WARN: HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+Jan 07, 2017 10:19:24 AM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl buildCreator
+INFO: HHH10001005: using driver [org.postgresql.Driver] at URL [jdbc:postgresql://localhost:5432/orm_hibernate]
+Jan 07, 2017 10:19:24 AM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl buildCreator
+INFO: HHH10001001: Connection properties: {user=postgres, password=****}
+Jan 07, 2017 10:19:24 AM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl buildCreator
+INFO: HHH10001003: Autocommit mode: false
+Jan 07, 2017 10:19:24 AM org.hibernate.engine.jdbc.connections.internal.PooledConnections <init>
+INFO: HHH000115: Hibernate connection pool size: 1 (min=1)
+Jan 07, 2017 10:19:24 AM org.hibernate.dialect.Dialect <init>
+INFO: HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL95Dialect
+Jan 07, 2017 10:19:25 AM org.hibernate.engine.jdbc.env.internal.LobCreatorBuilderImpl useContextualLobCreation
+INFO: HHH000424: Disabling contextual LOB creation as createClob() method threw error : java.lang.reflect.InvocationTargetException
+Jan 07, 2017 10:19:25 AM org.hibernate.type.BasicTypeRegistry register
+INFO: HHH000270: Type registration [java.util.UUID] overrides previous : org.hibernate.type.UUIDBinaryType@614ca7df
+Jan 07, 2017 10:19:25 AM org.hibernate.resource.transaction.backend.jdbc.internal.DdlTransactionIsolatorNonJtaImpl getIsolatedConnection
+INFO: HHH10001501: Connection obtained from JdbcConnectionAccess [org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator$ConnectionProviderJdbcConnectionAccess@53f48368] for (non-JTA) DDL execution was not in auto-commit mode; the Connection 'local transaction' will be committed and the Connection will be set into auto-commit mode.
+Jan 07, 2017 10:19:25 AM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl stop
+INFO: HHH10001008: Cleaning up connection pool [jdbc:postgresql://localhost:5432/orm_hibernate]
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.519 sec - in com.hotmail.dimmaryanto.software.belajar.test.CRUDBasic
+
+Results :
+
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+
+[INFO] ------------------------------------------------------------------------
+```
+
+
