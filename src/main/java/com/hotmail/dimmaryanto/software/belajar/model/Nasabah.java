@@ -22,6 +22,12 @@ import java.time.LocalDateTime;
 })
 public class Nasabah {
 
+    //    set default value as constructor
+    public Nasabah() {
+        setBlacklist(false);
+    }
+
+    //    set default value as generator
     private static class TimeGenerator implements ValueGenerator<Timestamp> {
         @Override
         public Timestamp generateValue(Session session, Object o) {
@@ -35,7 +41,7 @@ public class Nasabah {
     @Column(name = "nomor_register_nasabah")
     private String noRegister;
 
-    @Column(name = "waktu_register")
+    @Column(name = "waktu_register", updatable = false)
     @GeneratorType(type = TimeGenerator.class, when = GenerationTime.INSERT)
     private Timestamp waktuRegister;
 
@@ -51,8 +57,7 @@ public class Nasabah {
     @Formula(value = "concat(nama_depan, nama_belakang)")
     private String namaLengkap;
 
-    @Column(name = "diblacklist")
-    @ColumnDefault(value = "false")
+    @Column(name = "diblacklist", nullable = false)
     private Boolean blacklist;
 
     @Enumerated(EnumType.ORDINAL)
