@@ -67,6 +67,30 @@ public class CRUDBasic extends TestCase {
         session.close();
     }
 
+    @Test
+    public void testDeleteNegaraAmerikaSerikat() {
+        Negara amerikaSerikat = new Negara();
+        amerikaSerikat.setKode("USA");
+        amerikaSerikat.setNama("Amerika Serikat");
+        amerikaSerikat.setArea(1);
+
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        // save new instance object
+        session.save(amerikaSerikat);
+        session.getTransaction().commit();
+
+        // get object amerika serikat
+        session.beginTransaction();
+        amerikaSerikat = session.get(Negara.class, 1);
+        assertNotNull(amerikaSerikat);
+
+        // delete amerika serikat
+        session.delete(amerikaSerikat);
+        session.getTransaction().commit();
+        session.close();
+    }
+
     @Override
     protected void tearDown() throws Exception {
         super.tearDown();
