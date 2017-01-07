@@ -585,7 +585,7 @@ public class CRUDBasic extends TestCase {
 }
 ```
 
-Trus coba jalankan perintah testnya... dan berikut hasilnya:
+Trus sebelum jalankan **pastikan anda hapus delete dulu table negara** setelah itu baru jalankan perintah testnya... dan berikut hasilnya:
 
 ```bash
 Running com.hotmail.dimmaryanto.software.belajar.test.CRUDBasic
