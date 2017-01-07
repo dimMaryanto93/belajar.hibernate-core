@@ -87,6 +87,10 @@ public class CRUDBasic extends TestCase {
         // delete amerika serikat
         session.delete(amerikaSerikat);
         session.getTransaction().commit();
+
+        // get object amerika serikat
+        amerikaSerikat = session.get(Negara.class, 1);
+        assertNull(amerikaSerikat);
         session.close();
     }
 

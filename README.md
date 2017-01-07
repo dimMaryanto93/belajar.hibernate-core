@@ -701,3 +701,61 @@ Jadi gini alurnya:
 * Setelah itu kita periksa dulu nilainya dengan `assertEquals` apakah nilai kode.a adalah `INA`
 * Kemudian kita ubah nilainya menjadi `IND` lalu kita lakukan update
 * Lalu lakukan langkah ke 1 dan 2, dengan mengecek nilai yang disimpan apakah telah terupdate.
+
+Satu lagi, yaitu delete operasi. sama seperti update data negara tambahkan method berikut ke class yang sama:
+
+```java
+package com.hotmail.dimmaryanto.software.belajar.test;
+
+import com.hotmail.dimmaryanto.software.belajar.HibernateFactory;
+import com.hotmail.dimmaryanto.software.belajar.model.Negara;
+import junit.framework.TestCase;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.junit.Ignore;
+import org.junit.Test;
+
+/**
+ * Created by dimmaryanto93 on 07/01/17.
+ */
+public class CRUDBasic extends TestCase {
+    
+//  method lainnya...    
+
+   @Test
+   public void testDeleteNegaraAmerikaSerikat() {
+       Negara amerikaSerikat = new Negara();
+       amerikaSerikat.setKode("USA");
+       amerikaSerikat.setNama("Amerika Serikat");
+       amerikaSerikat.setArea(1);
+
+       Session session = sessionFactory.openSession();
+       session.beginTransaction();
+       // save new instance object
+       session.save(amerikaSerikat);
+       session.getTransaction().commit();
+
+       // get object amerika serikat
+       session.beginTransaction();
+       amerikaSerikat = session.get(Negara.class, 1);
+       assertNotNull(amerikaSerikat);
+
+       // delete amerika serikat
+       session.delete(amerikaSerikat);
+       session.getTransaction().commit();
+
+       // get object amerika serikat
+       amerikaSerikat = session.get(Negara.class, 1);
+       assertNull(amerikaSerikat);
+       session.close();
+   }
+
+}
+```
+
+Jadi pada koding diatas, berikut alurnya:
+
+* Pertama, kita buat dulu datanya contohnya saya insert data negara `amerika serikat`.
+* Setelah itu kita ambil datanya dari database kemudian check apakah datanya tidak sama dengan null atau artinya datanya benar-benar tersedia di database.
+* Kemudian kita hapus data tersebut, lalu di commit
+* Selanjutnya kita ambil lagi dari database kemudian kita check apakah datanya benar kosong.
