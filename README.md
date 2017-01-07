@@ -484,9 +484,6 @@ mvn clean test -Dtest=*
 berikut hasilnya:
 
 ```bash
--------------------------------------------------------
- T E S T S
--------------------------------------------------------
 Running com.hotmail.dimmaryanto.software.belajar.test.CRUDBasic
 Jan 07, 2017 10:19:24 AM org.hibernate.Version logVersion
 INFO: HHH000412: Hibernate Core {5.2.6.Final}
@@ -519,8 +516,142 @@ Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.519 sec - in c
 Results :
 
 Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
-
-[INFO] ------------------------------------------------------------------------
 ```
 
+Ok sekarang, saya mau membuat operasi simpan data tapi kita ubah dulu modelnya menjadi yang lebih sederhana seperti berikut:
 
+```java
+package com.hotmail.dimmaryanto.software.belajar.model;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+@Entity
+public class Negara {
+
+    @Id
+    @Column(name = "no_area", nullable = false, unique = true, length = 3)
+    private Integer area;
+
+    @Column(name = "kode_negara", nullable = false, unique = true, length = 3)
+    private String kode;
+
+    @Column(name = "nama_negara", nullable = false)
+    private String nama;
+    
+    // setter & getter
+}
+```
+
+Jadi perubahannya adalah kita menghapus attribut `id` dan primary keynya dipindahkan ke atrribut `area`. So tambahkan fungsi seperti berikut di class `CRUDBasic` seperti berikut:
+
+```java
+package com.hotmail.dimmaryanto.software.belajar.test;
+
+import com.hotmail.dimmaryanto.software.belajar.HibernateFactory;
+import com.hotmail.dimmaryanto.software.belajar.model.Negara;
+import junit.framework.TestCase;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.junit.Ignore;
+import org.junit.Test;
+
+/**
+ * Created by dimmaryanto93 on 07/01/17.
+ */
+public class CRUDBasic extends TestCase {
+
+    // method lainnya
+
+    @Test
+    public void testSimpanNegaraIndonesia() {
+        // instance new object
+        Negara indonesia = new Negara();
+        indonesia.setArea(62);
+        indonesia.setKode("INA");
+        indonesia.setNama("Indonesia");
+
+        // open connection
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+
+        // save
+        session.save(indonesia);
+        // commite transaction
+        session.getTransaction().commit();
+        session.close();
+    }
+}
+```
+
+Trus coba jalankan perintah testnya... dan berikut hasilnya:
+
+```bash
+Running com.hotmail.dimmaryanto.software.belajar.test.CRUDBasic
+Jan 07, 2017 12:14:12 PM org.hibernate.Version logVersion
+INFO: HHH000412: Hibernate Core {5.2.6.Final}
+Jan 07, 2017 12:14:12 PM org.hibernate.cfg.Environment <clinit>
+INFO: HHH000206: hibernate.properties not found
+Jan 07, 2017 12:14:13 PM org.hibernate.annotations.common.reflection.java.JavaReflectionManager <clinit>
+INFO: HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+Jan 07, 2017 12:14:13 PM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl configure
+WARN: HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+Jan 07, 2017 12:14:13 PM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl buildCreator
+INFO: HHH10001005: using driver [org.postgresql.Driver] at URL [jdbc:postgresql://localhost:5432/orm_hibernate]
+Jan 07, 2017 12:14:13 PM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl buildCreator
+INFO: HHH10001001: Connection properties: {user=postgres, password=****}
+Jan 07, 2017 12:14:13 PM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl buildCreator
+INFO: HHH10001003: Autocommit mode: false
+Jan 07, 2017 12:14:13 PM org.hibernate.engine.jdbc.connections.internal.PooledConnections <init>
+INFO: HHH000115: Hibernate connection pool size: 1 (min=1)
+Jan 07, 2017 12:14:13 PM org.hibernate.dialect.Dialect <init>
+INFO: HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL95Dialect
+Jan 07, 2017 12:14:13 PM org.hibernate.engine.jdbc.env.internal.LobCreatorBuilderImpl useContextualLobCreation
+INFO: HHH000424: Disabling contextual LOB creation as createClob() method threw error : java.lang.reflect.InvocationTargetException
+Jan 07, 2017 12:14:13 PM org.hibernate.type.BasicTypeRegistry register
+INFO: HHH000270: Type registration [java.util.UUID] overrides previous : org.hibernate.type.UUIDBinaryType@2f217633
+Jan 07, 2017 12:14:14 PM org.hibernate.resource.transaction.backend.jdbc.internal.DdlTransactionIsolatorNonJtaImpl getIsolatedConnection
+INFO: HHH10001501: Connection obtained from JdbcConnectionAccess [org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator$ConnectionProviderJdbcConnectionAccess@160ac7fb] for (non-JTA) DDL execution was not in auto-commit mode; the Connection 'local transaction' will be committed and the Connection will be set into auto-commit mode.
+Hibernate: create table Negara (no_area int4 not null, kode_negara varchar(3) not null, nama_negara varchar(255) not null, primary key (no_area))
+Hibernate: alter table Negara drop constraint if exists UK_9b5ag0t3hpbxthvm792e9bxih
+Jan 07, 2017 12:14:14 PM org.hibernate.engine.jdbc.spi.SqlExceptionHelper$StandardWarningHandler logWarning
+WARN: SQL Warning Code: 0, SQLState: 00000
+Jan 07, 2017 12:14:14 PM org.hibernate.engine.jdbc.spi.SqlExceptionHelper$StandardWarningHandler logWarning
+WARN: constraint "uk_9b5ag0t3hpbxthvm792e9bxih" of relation "negara" does not exist, skipping
+Hibernate: alter table Negara add constraint UK_9b5ag0t3hpbxthvm792e9bxih unique (kode_negara)
+Jan 07, 2017 12:14:14 PM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl stop
+INFO: HHH10001008: Cleaning up connection pool [jdbc:postgresql://localhost:5432/orm_hibernate]
+Jan 07, 2017 12:14:14 PM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl configure
+WARN: HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+Jan 07, 2017 12:14:14 PM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl buildCreator
+INFO: HHH10001005: using driver [org.postgresql.Driver] at URL [jdbc:postgresql://localhost:5432/orm_hibernate]
+Jan 07, 2017 12:14:14 PM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl buildCreator
+INFO: HHH10001001: Connection properties: {user=postgres, password=****}
+Jan 07, 2017 12:14:14 PM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl buildCreator
+INFO: HHH10001003: Autocommit mode: false
+Jan 07, 2017 12:14:14 PM org.hibernate.engine.jdbc.connections.internal.PooledConnections <init>
+INFO: HHH000115: Hibernate connection pool size: 1 (min=1)
+Jan 07, 2017 12:14:14 PM org.hibernate.dialect.Dialect <init>
+INFO: HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL95Dialect
+Jan 07, 2017 12:14:14 PM org.hibernate.engine.jdbc.env.internal.LobCreatorBuilderImpl useContextualLobCreation
+INFO: HHH000424: Disabling contextual LOB creation as createClob() method threw error : java.lang.reflect.InvocationTargetException
+Jan 07, 2017 12:14:14 PM org.hibernate.type.BasicTypeRegistry register
+INFO: HHH000270: Type registration [java.util.UUID] overrides previous : org.hibernate.type.UUIDBinaryType@2f217633
+Jan 07, 2017 12:14:14 PM org.hibernate.resource.transaction.backend.jdbc.internal.DdlTransactionIsolatorNonJtaImpl getIsolatedConnection
+INFO: HHH10001501: Connection obtained from JdbcConnectionAccess [org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator$ConnectionProviderJdbcConnectionAccess@22db8f4] for (non-JTA) DDL execution was not in auto-commit mode; the Connection 'local transaction' will be committed and the Connection will be set into auto-commit mode.
+Hibernate: insert into Negara (kode_negara, nama_negara, no_area) values (?, ?, ?)
+Jan 07, 2017 12:14:14 PM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl stop
+INFO: HHH10001008: Cleaning up connection pool [jdbc:postgresql://localhost:5432/orm_hibernate]
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.05 sec - in com.hotmail.dimmaryanto.software.belajar.test.CRUDBasic
+
+Results :
+
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
+```
+
+Nah secara otomatis hibernate akan membuat query seperti berikut:
+
+```sql
+Hibernate: insert into Negara (kode_negara, nama_negara, no_area) values (?, ?, ?)
+```
