@@ -64,7 +64,6 @@ public class Nasabah {
     @Column(name = "jenis_kelamin", nullable = false)
     private JenisKelamin jenisKelamin;
 
-    @Lob
     @Column(name = "tempat_lahir")
     private String tempatLahir;
 
