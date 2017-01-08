@@ -857,7 +857,7 @@ public class Nasabah {
 }
 ```
 
-Penjulasan koding annotation di atas:
+Penjelasan koding annotation di atas:
 
 * `@Table` biasanya digunakan untuk mendefinisikan hal yang nantinya di generate di database seperti nama table, unique constraint, scheme dan lain-lain.
 * `@UniqueConstraint` biasanya digunakan untuk membuat unique constraint yang lebih dari 1 column secara bersamaan contohnya seperti membuat persayaratan klo nasabahnya tidak boleh ada yang sama klo nilainya sama seperti column `nama_depan`, `nama_belakang`, `tanggal_lahir_nasabah`, dan `jenis_kelamin`.
@@ -868,3 +868,158 @@ Penjulasan koding annotation di atas:
 * `@Enumerated` digunakan untuk mengberikat tipe ketika dependecy yang digunakan adalah enum.
 * `@Lob` digunakan untuk mengisi text yang sangat panjang seperti contohnya alamat.
 * `@Formula` digunakan untuk melakukan perhitungan secara sql, contohnya pertambahan, pengurangan, perkalian, perbagian dll.
+
+Untuk lebih jelasnya mari kita buktikan **generator** dan **formula** berjalan dengan baik maka dari itu kita lakukan unit testing, buat file java dengan nama `MoreAnnotation` pada package `com.hotmail.dimmaryanto.software.belajar.test`, untuk pertama seperti biasa buat dulu method `setup()` dan `tearDown()` seperti berikut:
+
+```java
+package com.hotmail.dimmaryanto.software.belajar.test;
+
+import junit.framework.TestCase;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.junit.Test;
+
+import java.sql.Date;
+import java.time.LocalDate;
+
+/**
+ * Created by dimmaryanto93 on 07/01/17.
+ */
+public class MoreAnnotation extends TestCase {
+
+    private SessionFactory sessionFactory;
+
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        this.sessionFactory = new HibernateFactory().getSessionFactory();
+    }
+
+    @Override
+    protected void tearDown() throws Exception {
+        super.tearDown();
+        this.sessionFactory.close();
+    }
+}
+```
+
+Ok selanjutnya kita buat function save data nasabahnya, seperti berikut:
+
+```java
+package com.hotmail.dimmaryanto.software.belajar.test;
+
+import com.hotmail.dimmaryanto.software.belajar.HibernateFactory;
+import com.hotmail.dimmaryanto.software.belajar.model.JenisKelamin;
+import com.hotmail.dimmaryanto.software.belajar.model.Nasabah;
+import junit.framework.TestCase;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.junit.Test;
+
+import java.sql.Date;
+import java.time.LocalDate;
+
+/**
+ * Created by dimmaryanto93 on 07/01/17.
+ */
+public class MoreAnnotation extends TestCase {
+
+    @Test
+    public void testSimpanNasabah() {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+
+        Nasabah nasabah = new Nasabah();
+        nasabah.setJenisKelamin(JenisKelamin.LAKI_LAKI);
+        nasabah.setNamaDepan("Dimas");
+        nasabah.setNamaBelakang("Maryanto");
+        nasabah.setTanggalLahir(Date.valueOf(LocalDate.of(1993, 3, 28)));
+        nasabah.setTempatLahir("Jl.Bukit indah no B8 kab.Bandung kec.Cileunyi");
+        nasabah.setNamaIdentitas("Dimas Maryanto");
+        nasabah.setBlacklist(false);
+
+        session.save(nasabah);
+        session.getTransaction().commit();
+        session.close();
+    }
+}
+```
+
+Seperti yang anda lihat ya? disana saya tidak melakukan set nilai `waktuRegister`, ok selanjutnya kita running seperti biasa menggunakan perintah `mvn test -Dtest=*` kemudian kita buat function satu lagi untuk mengecheck generator sama formulanya seperti berikut:
+
+```java
+package com.hotmail.dimmaryanto.software.belajar.test;
+
+import com.hotmail.dimmaryanto.software.belajar.HibernateFactory;
+import com.hotmail.dimmaryanto.software.belajar.model.JenisKelamin;
+import com.hotmail.dimmaryanto.software.belajar.model.Nasabah;
+import junit.framework.TestCase;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.junit.Test;
+
+import java.sql.Date;
+import java.time.LocalDate;
+
+public class MoreAnnotation extends TestCase {
+
+    @Test
+    public void testAmbilDataNasabah() {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+
+        Nasabah nasabah = session.get(Nasabah.class, "68d56c4a-8039-4d1f-9bc2-889f805de3f7");
+        // test formula concat(nama_depan, ' ', nama_belakang)
+        assertEquals(nasabah.getNamaDepan() + " " + nasabah.getNamaBelakang(), nasabah.getNamaLengkap());
+
+        // test TimeGenerator()
+        assertNotNull(nasabah.getWaktuRegister());
+        session.close();
+    }
+
+}
+```
+
+Jadi setelah di jalankan kita, kita lihat dulu ke database pada table `m_nasabah` kemudian view datanya lalu kita ambil nomor_register_nasabah berikut perintahnya:
+
+```postgresplsql
+dimmaryanto93@Aspire-E5-473G:~$ psql -h localhost -U postgres orm_hibernate
+psql (9.5.5)
+SSL connection (protocol: TLSv1.2, cipher: ECDHE-RSA-AES256-GCM-SHA384, bits: 256, compression: off)
+Type "help" for help.
+
+orm_hibernate=# \d m_nasabah
+                     Table "public.m_nasabah"
+         Column         |            Type             | Modifiers 
+------------------------+-----------------------------+-----------
+ nomor_register_nasabah | character varying(255)      | not null
+ diblacklist            | boolean                     | not null
+ jenis_kelamin          | integer                     | not null
+ nama_belakang          | character varying(255)      | not null
+ nama_depan             | character varying(255)      | not null
+ nama_identitas_nasabah | character varying(25)       | not null
+ tanggal_lahir_nasabah  | date                        | not null
+ tempat_lahir           | text                        | 
+ waktu_register         | timestamp without time zone | 
+Indexes:
+    "m_nasabah_pkey" PRIMARY KEY, btree (nomor_register_nasabah)
+    "unique_nasabah" UNIQUE CONSTRAINT, btree (nama_depan, nama_belakang, tanggal_lahir_nasabah, jenis_kelamin)
+
+orm_hibernate=# select nomor_register_nasabah from m_nasabah;
+        nomor_register_nasabah        
+--------------------------------------
+ 68d56c4a-8039-4d1f-9bc2-889f805de3f7
+(1 row)
+
+orm_hibernate=#
+```
+
+Baru lah kita dapat primary keynya yaitu `68d56c4a-8039-4d1f-9bc2-889f805de3f7`, setelah kita dapat idnya langsung kita ambil objectnya lalu kita test dengan function seperti berikut:
+
+```java
+// test formula concat(nama_depan, ' ', nama_belakang)
+assertEquals(nasabah.getNamaDepan() + " " + nasabah.getNamaBelakang(), nasabah.getNamaLengkap());
+
+// test TimeGenerator()
+assertNotNull(nasabah.getWaktuRegister());
+```

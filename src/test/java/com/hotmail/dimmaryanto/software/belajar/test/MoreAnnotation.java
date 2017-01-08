@@ -49,8 +49,11 @@ public class MoreAnnotation extends TestCase {
         session.beginTransaction();
 
         Nasabah nasabah = session.get(Nasabah.class, "68d56c4a-8039-4d1f-9bc2-889f805de3f7");
+        // test formula concat(nama_depan, ' ', nama_belakang)
         assertEquals(nasabah.getNamaDepan() + " " + nasabah.getNamaBelakang(), nasabah.getNamaLengkap());
 
+        // test TimeGenerator()
+        assertNotNull(nasabah.getWaktuRegister());
         session.close();
     }
 
