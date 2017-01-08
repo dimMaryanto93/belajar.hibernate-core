@@ -1023,3 +1023,44 @@ assertEquals(nasabah.getNamaDepan() + " " + nasabah.getNamaBelakang(), nasabah.g
 // test TimeGenerator()
 assertNotNull(nasabah.getWaktuRegister());
 ```
+
+jika method `testAmbilDataNasabah()` kita running, maka hasilnya seperti berikut:
+
+```bash
+Hibernate: 
+    select
+        nasabah0_.nomor_register_nasabah as nomor_re1_0_0_,
+        nasabah0_.diblacklist as diblackl2_0_0_,
+        nasabah0_.jenis_kelamin as jenis_ke3_0_0_,
+        nasabah0_.nama_belakang as nama_bel4_0_0_,
+        nasabah0_.nama_depan as nama_dep5_0_0_,
+        nasabah0_.nama_identitas_nasabah as nama_ide6_0_0_,
+        nasabah0_.tanggal_lahir_nasabah as tanggal_7_0_0_,
+        nasabah0_.tempat_lahir as tempat_l8_0_0_,
+        nasabah0_.waktu_register as waktu_re9_0_0_,
+        concat(nasabah0_.nama_depan,
+        ' ',
+        nasabah0_.nama_belakang) as formula0_0_ 
+    from
+        m_nasabah nasabah0_ 
+    where
+        nasabah0_.nomor_register_nasabah=?
+```
+
+Secara database tidak ada field atau column dengan nama `namaLengkap` tapi hibernate akan menambahkan query seperti berikut:
+
+```sql
+concat(nasabah0_.nama_depan, ' ', nasabah0_.nama_belakang) as formula0_0_
+```
+
+Selanjutnya kita test `TimeGenerator()` kita hanya mengecheck apakah datanya null atau tidak, karena timenya di generate by system. untuk lebih detailnya kita select ja ke database dengan query seperti berikut:
+
+```postgresplsql
+orm_hibernate=# select waktu_register from m_nasabah where nomor_register_nasabah = '68d56c4a-8039-4d1f-9bc2-889f805de3f7';
+     waktu_register      
+-------------------------
+ 2017-01-08 08:25:01.942
+(1 row)
+```
+
+Keuntungannya menggunakan `@GeneratorType` dengan hanya perintah `save()` kita bisa membuat generator yang sekaligus di tanamkan selain untuk waktu kita juga bisa membuat generator yang lainya seperti penomoran dll.
