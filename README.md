@@ -759,3 +759,112 @@ Jadi pada koding diatas, berikut alurnya:
 * Setelah itu kita ambil datanya dari database kemudian check apakah datanya tidak sama dengan null atau artinya datanya benar-benar tersedia di database.
 * Kemudian kita hapus data tersebut, lalu di commit
 * Selanjutnya kita ambil lagi dari database kemudian kita check apakah datanya benar kosong.
+
+## Annotation Lebih lanjut
+
+Kita akan bahas annotation yang yang sering digunakan secara umum, yaitu seperti berikut contohnya buat class dengan nama `Nasabah` dan enum `JenisKelamin` dalam package `com.hotmail.dimmaryanto.software.belajar.model`:
+
+```java
+package com.hotmail.dimmaryanto.software.belajar.model;
+
+public enum JenisKelamin {
+
+    LAKI_LAKI("Laki Laki"),
+    PEREMPUAN("Perempuan");
+
+    private String text;
+
+    JenisKelamin(String text) {
+        this.text = text;
+    }
+
+//    setter & getter
+}
+```
+
+```java
+package com.hotmail.dimmaryanto.software.belajar.model;
+
+import org.hibernate.Session;
+import org.hibernate.annotations.*;
+import org.hibernate.tuple.ValueGenerator;
+
+import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import java.sql.Date;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = "m_nasabah", uniqueConstraints = {
+        @UniqueConstraint(name = "unique_nasabah", columnNames = {
+                "nama_depan", "nama_belakang", "tanggal_lahir_nasabah", "jenis_kelamin"
+        })
+})
+public class Nasabah {
+
+    //    set default value as constructor
+    public Nasabah() {
+        setBlacklist(false);
+    }
+
+    //    set default value as generator
+    private static class TimeGenerator implements ValueGenerator<Timestamp> {
+        @Override
+        public Timestamp generateValue(Session session, Object o) {
+            return Timestamp.valueOf(LocalDateTime.now());
+        }
+    }
+
+    @Id
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    @GeneratedValue(generator = "uuid")
+    @Column(name = "nomor_register_nasabah")
+    private String noRegister;
+
+    @Column(name = "waktu_register", updatable = false)
+    @GeneratorType(type = TimeGenerator.class, when = GenerationTime.INSERT)
+    private Timestamp waktuRegister;
+
+    @Column(name = "nama_identitas_nasabah", nullable = false, length = 25)
+    private String namaIdentitas;
+
+    @Column(name = "nama_depan", nullable = false)
+    private String namaDepan;
+
+    @Column(name = "nama_belakang", nullable = false)
+    private String namaBelakang;
+
+    @Formula(value = "concat(nama_depan, ' ' , nama_belakang)")
+    private String namaLengkap;
+
+    @Column(name = "diblacklist", nullable = false)
+    private Boolean blacklist;
+
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "jenis_kelamin", nullable = false)
+    private JenisKelamin jenisKelamin;
+
+    @Lob
+    @Column(name = "tempat_lahir")
+    private String tempatLahir;
+
+    @Column(name = "tanggal_lahir_nasabah", nullable = false)
+    private Date tanggalLahir;
+
+//    setter & getter 
+}
+```
+
+Penjulasan koding annotation di atas:
+
+* `@Table` biasanya digunakan untuk mendefinisikan hal yang nantinya di generate di database seperti nama table, unique constraint, scheme dan lain-lain.
+* `@UniqueConstraint` biasanya digunakan untuk membuat unique constraint yang lebih dari 1 column secara bersamaan contohnya seperti membuat persayaratan klo nasabahnya tidak boleh ada yang sama klo nilainya sama seperti column `nama_depan`, `nama_belakang`, `tanggal_lahir_nasabah`, dan `jenis_kelamin`.
+* `@GenericGenerator` digunakan untuk membuat generator contohnya seperti generator `uuid2` dan lain-lain.
+* `@GeneratorType` digunakan untuk menyisi value secara otomatis tergantung dari even si hibernate contohnya ketika di insert maka otomatis di insert value pada column tertentu.
+* `@GeneratedValue` digunakan untuk menerapkan generator, diantaranya `@GenericGenerator`, `@SequanceGenerator`, dan `@TableGenerator`
+* `@Embedded` bisanya model yang tidak memiliki table di database tapi akan di ikut sertakan di model yang super atau yang mengimplementasikannya
+* `@Enumerated` digunakan untuk mengberikat tipe ketika dependecy yang digunakan adalah enum.
+* `@Lob` digunakan untuk mengisi text yang sangat panjang seperti contohnya alamat.
+* `@Formula` digunakan untuk melakukan perhitungan secara sql, contohnya pertambahan, pengurangan, perkalian, perbagian dll.

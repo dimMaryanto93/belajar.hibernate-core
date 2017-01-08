@@ -44,12 +44,12 @@ public class MoreAnnotation extends TestCase {
     }
 
     @Test
-    public void testAmbilDataNasabah(){
+    public void testAmbilDataNasabah() {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
 
-        Nasabah nasabah = session.get(Nasabah.class, "540d869a-98a7-4ab4-8dcb-6bd6a65eb9b1");
-        assertEquals(nasabah.getNamaLengkap(), nasabah.getNamaDepan().concat(nasabah.getNamaBelakang()));
+        Nasabah nasabah = session.get(Nasabah.class, "68d56c4a-8039-4d1f-9bc2-889f805de3f7");
+        assertEquals(nasabah.getNamaDepan() + " " + nasabah.getNamaBelakang(), nasabah.getNamaLengkap());
 
         session.close();
     }

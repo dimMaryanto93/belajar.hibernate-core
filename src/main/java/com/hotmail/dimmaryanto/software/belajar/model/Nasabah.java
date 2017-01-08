@@ -54,7 +54,7 @@ public class Nasabah {
     @Column(name = "nama_belakang", nullable = false)
     private String namaBelakang;
 
-    @Formula(value = "concat(nama_depan, nama_belakang)")
+    @Formula(value = "concat(nama_depan, ' ', nama_belakang)")
     private String namaLengkap;
 
     @Column(name = "diblacklist", nullable = false)
