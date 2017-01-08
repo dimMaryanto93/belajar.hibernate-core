@@ -982,7 +982,7 @@ public class MoreAnnotation extends TestCase {
 
 Jadi setelah di jalankan kita, kita lihat dulu ke database pada table `m_nasabah` kemudian view datanya lalu kita ambil nomor_register_nasabah berikut perintahnya:
 
-```postgresplsql
+```postgresql
 dimmaryanto93@Aspire-E5-473G:~$ psql -h localhost -U postgres orm_hibernate
 psql (9.5.5)
 SSL connection (protocol: TLSv1.2, cipher: ECDHE-RSA-AES256-GCM-SHA384, bits: 256, compression: off)
@@ -1055,8 +1055,8 @@ concat(nasabah0_.nama_depan, ' ', nasabah0_.nama_belakang) as formula0_0_
 
 Selanjutnya kita test `TimeGenerator()` kita hanya mengecheck apakah datanya null atau tidak, karena timenya di generate by system. untuk lebih detailnya kita select ja ke database dengan query seperti berikut:
 
-```postgresplsql
-orm_hibernate=# select waktu_register from m_nasabah where nomor_register_nasabah = '68d56c4a-8039-4d1f-9bc2-889f805de3f7';
+```postgresql
+select waktu_register from m_nasabah where nomor_register_nasabah = '68d56c4a-8039-4d1f-9bc2-889f805de3f7';
      waktu_register      
 -------------------------
  2017-01-08 08:25:01.942
